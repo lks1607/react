@@ -11,39 +11,60 @@
   </body>
   <script
     crossorigin
-    src="https://unpkg.com/react@18/umd/react.development.js"
+    src="https://unpkg.com/react@18/umd/react.production.min.js"
   ></script>
   <script
     crossorigin
-    src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
   ></script>
   <!-- v6 <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Your custom script here -->
   <script type="text/babel">
-    const root = document.getElementById('root');
-    const Title = () => (
-      <h3 id="title" onMouseEnter={() => console.log('The Mouse Enter')}>
-        Hello I'm title
-      </h3>
-    );
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    function App() {
+      const [amount, setAmount] = React.useState(0);
+      const [flipped, setflipped] = React.useState(false);
+      const onChange = (event) => {
+        setAmount(event.target.value);
+      };
+      const reSet = () => setAmount(0);
+      const onFlip = () => {
+        reSet();
+        setflipped((current) => !current);
+      };
+      return (
+        <div>
+          <h1>Super Converter </h1>
+          <div>
+            <label htmlFor="minutes">Minutes</label>
+            <input
+              value={flipped ? amount * 60 : amount}
+              placeholder="Minutes"
+              type="number"
+              id="minutes"
+              onChange={onChange}
+              disabled={flipped === true}
+            />
+          </div>
+          <h4>You want to convert : {amount}</h4>
+          <div>
+            <label htmlFor="hours">Hours</label>
+            <input
+              value={flipped ? amount : Math.round(amount / 60)}
+              placeholder="Hours"
+              type="number"
+              id="hours"
+              onChange={onChange}
+              disabled={flipped === false}
+            />
+          </div>
+          <button onClick={reSet}>Reset</button>
+          <button onClick={onFlip}>Flip</button>
+        </div>
+      );
+    }
 
-    const Button = () => (
-      <button
-        style={{ backgroundColor: 'tomato' }}
-        onClick={() => console.log('Clicked')}
-      >
-        Click Button!
-      </button>
-    );
-
-    const container = (
-      <div>
-        <Title />
-        <Button />
-      </div>
-    );
-
-    ReactDOM.createRoot(root).render(container);
+    root.render(<App />);
   </script>
 </html>
